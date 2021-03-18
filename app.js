@@ -9,8 +9,7 @@ const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
 const getGif = require('./api')
-const getRandomInt = require('./util')
-
+const { getRandomInt, ucfirst } = require('./util')
 
 let bot;
  
@@ -31,7 +30,6 @@ bot.on('text', async (ctx) => {
   console.log(ctx)
   const chat_id = ctx.chat.id
   const string = ctx.text.toLocaleLowerCase()
-  const isBot = ctx.from.is_bot
   const name = ctx.from.first_name.toLowerCase()
 
   if (name  === 'brock') {
@@ -50,7 +48,7 @@ bot.on('text', async (ctx) => {
     if (response.includes('.gif')) {
       bot.sendDocument(chat_id, response);
       if (insult_name[0] !== 'csu') {
-        bot.sendMessage(chat_id, `${insult_name[0]} sucks`)
+        bot.sendMessage(chat_id, `${insult_name[0].toUpperCase()} sucks`)
       }  
     }
   }
@@ -68,23 +66,19 @@ bot.on('text', async (ctx) => {
       bot.sendDocument(chat_id, response);
     }
   }
-  if (string.includes('roll tide') && !isBot) {
+  if (string.includes('roll tide')) {
     bot.sendMessage(chat_id, 'Roll Tide')
   }
-  if (string.includes('go blue') && !isBot) {
+  if (string.includes('go blue')) {
     bot.sendMessage(chat_id, 'Go Blue')
   }
-  if (string.includes('sko buffs') && !isBot) {
+  if (string.includes('sko buffs')) {
     bot.sendMessage(chat_id, 'Sko Buffs')
   }
-  if (string.includes('csu') && !isBot) {
+  if (string.includes('csu')) {
     bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!')
   }
   if (string.includes('insult')) {
-    const ucfirst = (str) => {
-      let firstLetter = str.substr(0, 1);
-      return firstLetter.toUpperCase() + str.substr(1);
-    }
     let stringArray = string.split(' ')
     let insult_name_index = stringArray.indexOf('insult') + 1
     let insult_name = stringArray[insult_name_index]
@@ -97,7 +91,6 @@ bot.on('text', async (ctx) => {
         if (response) {
           insultArray = insultArray.splice(2, insultArray.length)
           insultArray.unshift(`${ucfirst(insult_name)} is`)
-          console.log(insultArray.join(' '))
           bot.sendMessage(chat_id, insultArray.join(' '))
         }
       } catch(e){

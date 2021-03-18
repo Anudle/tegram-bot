@@ -2,7 +2,7 @@ const GIF_URL =  `https://g.tenor.com/v1/search?key=${process.env.GIF_KEY}`
 
 require('dotenv').config();
 const axios = require("axios");
-const getRandomInt = require('./util')
+const { getRandomInt } = require('./util')
 
 const getGif = async (searchTerm) => {
   console.log(`url = ${GIF_URL}&q=${searchTerm}`)
