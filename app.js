@@ -24,10 +24,10 @@ bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
   const string = ctx.text.toLocaleLowerCase()
   const isBot = ctx.from.is_bot
-  const name = ctx.from.first_name
+  const name = ctx.from.first_name.toLowerCase()
 
-  if (name  === 'Brock') {
-    if (string.includes(' bet ') || string.includes('betting')) {
+  if (name  === 'brock') {
+    if (string.includes(' bet ' || 'betting')) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
   }
