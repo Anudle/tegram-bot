@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'production') {
    bot = new TelegramBot(token, { polling: true });
 }
 
-const roll_tide_value = ['roll tide', 'rtr']
+const roll_tide_value = ['roll tide', 'rtr', 'auburn sucks', 'lsu sucks']
 const brock_bets = [' bet ', 'betting']
 const stock_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo']
 
@@ -49,6 +49,10 @@ bot.on('text', async (ctx) => {
     }
   }
   if (roll_tide_value.some(word => string.includes(word))) {
+    let response = await getGif('roll tide')
+      if (response) {
+        bot.sendDocument(chat_id, response)
+      } 
     bot.sendMessage(chat_id, 'Roll Tide')
   }
   if (string.includes('go blue') && !isBot) {
