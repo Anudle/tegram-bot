@@ -31,7 +31,7 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
   }
-  if (string.includes('roll tide') && !isBot) {
+  if (string.includes('roll tide' || 'rtr' || 'gme') && !isBot) {
     bot.sendMessage(chat_id, 'Roll Tide')
   }
   if (string.includes('go blue') && !isBot) {
@@ -45,29 +45,28 @@ bot.on('text', async (ctx) => {
   }
   if (string.includes('insult')) {
     const ucfirst = (str) => {
-      var firstLetter = str.substr(0, 1);
+      let firstLetter = str.substr(0, 1);
       return firstLetter.toUpperCase() + str.substr(1);
     }
     let stringArray = string.split(' ')
     let insult_name_index = stringArray.indexOf('insult') + 1
     let insult_name = stringArray[insult_name_index]
-    console.log(insult_name) 
-    try {
-      const response = await axios.get(INSULT_URL)
-
-      let insultArray = response.data.insult.split(' ')
-      if (response) {
-        insultArray = insultArray.splice(2, insultArray.length)
-        insultArray.unshift(`${ucfirst(insult_name)} is`)
-        console.log(insultArray.join(' '))
-        bot.sendMessage(chat_id, insultArray.join(' '))
+    if (insult_name.toLowerCase() === 'anu') {
+      bot.sendMessage(chat_id, "I'm sorry, I can't insult my bot father")
+    } else {
+      try {
+        const response = await axios.get(INSULT_URL)
+        let insultArray = response.data.insult.split(' ')
+        if (response) {
+          insultArray = insultArray.splice(2, insultArray.length)
+          insultArray.unshift(`${ucfirst(insult_name)} is`)
+          console.log(insultArray.join(' '))
+          bot.sendMessage(chat_id, insultArray.join(' '))
+        }
+      } catch(e){
+        console.log(e)
+        bot.sendMessage(chat_id, "Not today I'm broken")
       }
-      // if (response.data && response.data.insult) { 
-      //   bot.sendMessage(chat_id, response.data.text)
-      // }
-    } catch(e){
-      console.log(e)
-      bot.sendMessage(chat_id, "Not today I'm broken")
     }
   }
   
@@ -82,8 +81,6 @@ bot.on('text', async (ctx) => {
     }
   }
 })
-
-// bot.launch()
 
 const app = express();
 
