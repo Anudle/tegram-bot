@@ -43,6 +43,10 @@ bot.on('text', async (ctx) => {
       }
     })
     console.log(searchWord)
+    if (searchWord.includes('autist')) {
+      console.log('wait in hhere god dag')
+      searchWord.unshift('rain man')
+    }
     let response = await getGif(searchWord[0])
     if (response.includes('.gif')) {
       bot.sendDocument(chat_id, response);

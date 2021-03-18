@@ -10,7 +10,6 @@ const getGif = async (searchTerm) => {
   try {
     const response = await axios.get(`${GIF_URL}&q=${searchTerm}`)
     if (response.data.results) {
-      console.log('response in api ', response.data.results)
       const randomInt = getRandomInt(response.data.results.length)
       gif = response.data.results[randomInt].url
     }
