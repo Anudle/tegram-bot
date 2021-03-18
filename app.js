@@ -9,6 +9,7 @@ const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
 const getGif = require('./api')
+const getRandomInt = require('./util')
 
 
 let bot;
@@ -22,7 +23,9 @@ if (process.env.NODE_ENV === 'production') {
 
 const roll_tide_value = ['roll tide', 'rtr', 'auburn sucks', 'lsu sucks']
 const brock_bets = [' bet ', 'betting']
-const stock_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist']
+const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
+const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
+const insult_search = ['turd', 'shit', 'sucks', 'ass']
 
 bot.on('text', async (ctx) => {
   console.log(ctx)
@@ -36,15 +39,20 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
   }
-  if (stock_trigger.some(word => string.includes(word))) {
-    const searchWord = stock_trigger.filter(word => {
+  if (insult_trigger.some(word => string.includes(word))) {
+    let randomSearch = insult_search[getRandomInt(insult_search.length - 1)]
+    let response = await getGif(randomSearch)
+    if (response.includes('.gif')) {
+      bot.sendDocument(chat_id, response);
+    }
+  }
+  if (gif_trigger.some(word => string.includes(word))) {
+    const searchWord = gif_trigger.filter(word => {
       if (string.includes(word)) {
         return word
       }
     })
-    console.log(searchWord)
     if (searchWord.includes('autist')) {
-      console.log('wait in hhere god dag')
       searchWord.unshift('rain man')
     }
     let response = await getGif(searchWord[0])
@@ -52,11 +60,7 @@ bot.on('text', async (ctx) => {
       bot.sendDocument(chat_id, response);
     }
   }
-  if (roll_tide_value.some(word => string.includes(word))) {
-    let response = await getGif('roll tide')
-      if (response) {
-        bot.sendDocument(chat_id, response)
-      } 
+  if (string.includes('roll tide') && !isBot) {
     bot.sendMessage(chat_id, 'Roll Tide')
   }
   if (string.includes('go blue') && !isBot) {
