@@ -4,7 +4,7 @@ require('dotenv').config();
 const axios = require("axios");
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
 const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
-const GIF_URL =  `https://g.tenor.com/v1/search?key=${process.env.GIF_KEY}`
+const GIF_URL =  `https://g.tenor.com/v1/search?key=${process.env.GIF_KEY}&locale=en_US`
 const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const roll_tide_value = ['roll tide', 'rtr']
 const brock_bets = [' bet ', 'betting']
+const stock_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo']
 
 bot.on('text', async (ctx) => {
   console.log(ctx)
@@ -35,12 +36,17 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
   }
-  if (string.includes('gme')) {
-    let response = await getGif('GME')
+  if (stock_trigger.some(word => string.includes(word))) {
+    const searchWord = stock_trigger.filter(word => {
+      if (string.includes(word)) {
+        return word
+      }
+    })
+    console.log(searchWord)
+    let response = await getGif(searchWord[0])
     if (response.includes('.gif')) {
       bot.sendDocument(chat_id, response);
     }
-    console.log('response in app', response)
   }
   if (roll_tide_value.some(word => string.includes(word))) {
     bot.sendMessage(chat_id, 'Roll Tide')
