@@ -43,6 +43,34 @@ bot.on('text', async (ctx) => {
   if (string.includes('csu') && !isBot) {
     bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!')
   }
+  if (string.includes('insult')) {
+    const ucfirst = (str) => {
+      var firstLetter = str.substr(0, 1);
+      return firstLetter.toUpperCase() + str.substr(1);
+    }
+    let stringArray = string.split(' ')
+    let insult_name_index = stringArray.indexOf('insult') + 1
+    let insult_name = stringArray[insult_name_index]
+    console.log(insult_name) 
+    try {
+      const response = await axios.get(INSULT_URL)
+
+      let insultArray = response.data.insult.split(' ')
+      if (response) {
+        insultArray = insultArray.splice(2, insultArray.length)
+        insultArray.unshift(`${ucfirst(insult_name)} is`)
+        console.log(insultArray.join(' '))
+        bot.sendMessage(chat_id, insultArray.join(' '))
+      }
+      // if (response.data && response.data.insult) { 
+      //   bot.sendMessage(chat_id, response.data.text)
+      // }
+    } catch(e){
+      console.log(e)
+      bot.sendMessage(chat_id, "Not today I'm broken")
+    }
+  }
+  
   if (string.includes('fun fact')) {
     try {
       const response = await axios.get(FACT_URL)
