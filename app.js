@@ -25,7 +25,7 @@ const roll_tide_value = ['roll tide', 'rtr', 'auburn sucks', 'lsu sucks']
 const brock_bets = [' bet ', 'betting']
 const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
 const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
-const insult_search = ['turd', 'shit', 'sucks', 'ass']
+const insult_search = ['turd', 'shit', 'sucks', 'ass', 'chump', 'loser', 'stupid']
 
 bot.on('text', async (ctx) => {
   console.log(ctx)
@@ -42,8 +42,16 @@ bot.on('text', async (ctx) => {
   if (insult_trigger.some(word => string.includes(word))) {
     let randomSearch = insult_search[getRandomInt(insult_search.length - 1)]
     let response = await getGif(randomSearch)
+    const insult_name = insult_trigger.filter(word => {
+      if (string.includes(word)) {
+        return word
+      }
+    })
     if (response.includes('.gif')) {
       bot.sendDocument(chat_id, response);
+      if (insult_name[0] !== 'csu') {
+        bot.sendMessage(chat_id, `${insult_name[0]} sucks`)
+      }  
     }
   }
   if (gif_trigger.some(word => string.includes(word))) {
