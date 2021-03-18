@@ -18,6 +18,8 @@ if (process.env.NODE_ENV === 'production') {
    bot = new TelegramBot(token, { polling: true });
 }
 
+const roll_tide_value = ['roll tide', 'rtr', 'gme']
+const brock_bets = [' bet ', 'betting']
 
 bot.on('text', async (ctx) => {
   console.log(ctx)
@@ -27,11 +29,11 @@ bot.on('text', async (ctx) => {
   const name = ctx.from.first_name.toLowerCase()
 
   if (name  === 'brock') {
-    if (string.includes(' bet ' || 'betting')) {
+    if (brock_bets.some(word => string.includes(word))) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
   }
-  if (string.includes('roll tide' || 'rtr' || 'gme') && !isBot) {
+  if (roll_tide_value.some(word => string.includes(word))) {
     bot.sendMessage(chat_id, 'Roll Tide')
   }
   if (string.includes('go blue') && !isBot) {
