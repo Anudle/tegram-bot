@@ -1,4 +1,4 @@
-
+const TelegramBot = require('node-telegram-bot-api');
 const { Telegraf } = require('telegraf')
 require('dotenv').config();
 const axios = require("axios");
@@ -12,47 +12,50 @@ const bodyParser = require('body-parser');
 let bot;
  
 if (process.env.NODE_ENV === 'production') {
-   bot = new Telegraf(token);
+   bot = new TelegramBot(token);
    bot.setWebHook(process.env.HEROKU_URL + bot.token);
 } else {
-   bot = new Telegraf(token, { polling: true });
+   bot = new TelegramBot(token, { polling: true });
 }
 
 
 bot.on('text', async (ctx) => {
-  let name = ctx.update.message.from.first_name 
-  const isBot = ctx.update.message.from.is_bot
-  let string = ctx.update.message.text.toLowerCase()
+  console.log(ctx)
+  const chat_id = ctx.chat.id
+  const string = ctx.text.toLocaleLowerCase()
+  const isBot = ctx.from.is_bot
+  const name = ctx.from.first_name
+
   if (name  === 'Brock') {
     if (string.includes(' bet ') || string.includes('betting')) {
-      ctx.reply("'Nahhhhh' -Lucas Brandl")
+      bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
   }
   if (string.includes('roll tide') && !isBot) {
-    ctx.reply('Roll Tide')
+    bot.sendMessage(chat_id, 'Roll Tide')
   }
   if (string.includes('go blue') && !isBot) {
-    ctx.reply('Go Blue')
+    bot.sendMessage(chat_id, 'Go Blue')
   }
   if (string.includes('sko buffs') && !isBot) {
-    ctx.reply('Sko Buffs')
+    bot.sendMessage(chat_id, 'Sko Buffs')
   }
   if (string.includes('csu') && !isBot) {
-    ctx.reply('I said it sucks to be a CSU Ram!')
+    bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!')
   }
   if (string.includes('fun fact')) {
     try {
       const response = await axios.get(FACT_URL)
       if (response.data && response.data.text) { 
-        ctx.reply(response.data.text)
+        bot.sendMessage(chat_id, response.data.text)
       }
     } catch(e){
-      ctx.reply("Not today I'm broken")
+      bot.sendMessage(chat_id, "Not today I'm broken")
     }
   }
 })
 
-bot.launch()
+// bot.launch()
 
 const app = express();
 
