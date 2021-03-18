@@ -5,6 +5,8 @@ const axios = require("axios");
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
 const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
 const token = process.env.TOKEN;
+const express = require('express')
+const bodyParser = require('body-parser');
 
 
 let bot;
@@ -41,7 +43,6 @@ bot.on('text', async (ctx) => {
   if (string.includes('fun fact')) {
     try {
       const response = await axios.get(FACT_URL)
-      console.log(response)
       if (response.data && response.data.text) { 
         ctx.reply(response.data.text)
       }
@@ -53,3 +54,13 @@ bot.on('text', async (ctx) => {
 
 bot.launch()
 
+const app = express();
+
+app.use(bodyParser.json());
+
+app.listen(process.env.PORT);
+
+app.post('/' + bot.token, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
