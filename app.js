@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const roll_tide_value = ['roll tide', 'rtr', 'auburn sucks', 'lsu sucks']
 const brock_bets = [' bet ', 'betting']
-const stock_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo']
+const stock_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist']
 
 bot.on('text', async (ctx) => {
   console.log(ctx)
