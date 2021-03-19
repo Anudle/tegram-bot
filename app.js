@@ -20,11 +20,10 @@ if (process.env.NODE_ENV === 'production') {
    bot = new TelegramBot(token, { polling: true });
 }
 
-const roll_tide_value = ['roll tide', 'rtr', 'auburn sucks', 'lsu sucks']
 const brock_bets = [' bet ', 'betting']
 const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
 const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
-const insult_search = ['turd', 'shit', 'sucks', 'ass', 'chump', 'loser', 'stupid']
+const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 
 bot.on('text', async (ctx) => {
   console.log(ctx)
