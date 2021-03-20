@@ -60,6 +60,9 @@ bot.on('text', async (ctx) => {
     if (searchWord.includes('autist')) {
       searchWord.unshift('rain man')
     }
+    if (searchWord.includes('buffs')) {
+      searchWord.unshift('colorado buffs')
+    }
     let response = await getGif(searchWord[0])
     if (response.includes('.gif')) {
       bot.sendDocument(chat_id, response);
