@@ -26,7 +26,6 @@ const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 
 bot.on('text', async (ctx) => {
-  console.log(ctx)
   const chat_id = ctx.chat.id
   const string = ctx.text.toLocaleLowerCase()
   const name = ctx.from.first_name.toLowerCase()
@@ -60,8 +59,9 @@ bot.on('text', async (ctx) => {
     if (searchWord.includes('autist')) {
       searchWord.unshift('rain man')
     }
-    if (searchWord.includes('buffs')) {
+    if (searchWord.includes('sko buffs')) {
       searchWord.unshift('colorado buffs')
+      console.log('search word', searchWord)
     }
     let response = await getGif(searchWord[0])
     if (response.includes('.gif')) {
