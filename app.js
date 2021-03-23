@@ -1,5 +1,4 @@
 const TelegramBot = require('node-telegram-bot-api');
-const { Telegraf } = require('telegraf')
 require('dotenv').config();
 const axios = require("axios");
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
@@ -26,6 +25,7 @@ const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 
 bot.on('text', async (ctx) => {
+  console.log(ctx)
   const chat_id = ctx.chat.id
   const string = ctx.text.toLocaleLowerCase()
   const name = ctx.from.first_name.toLowerCase()
@@ -61,7 +61,6 @@ bot.on('text', async (ctx) => {
     }
     if (searchWord.includes('sko buffs')) {
       searchWord.unshift('colorado buffs')
-      console.log('search word', searchWord)
     }
     let response = await getGif(searchWord[0])
     if (response.includes('.gif')) {
@@ -101,7 +100,33 @@ bot.on('text', async (ctx) => {
       }
     }
   }
-  
+
+  if (string.includes('make zoom poll')){
+    bot.sendMessage(chat_id, 'Beep Boop. Okay for what time?', { "reply_markup": {
+        "inline_keyboard": [
+          [
+            {
+              text: "Wednesday",
+              callback_data: "wed",
+            },
+            {
+              text: "Thursday",
+              callback_data: "thursday",
+            },
+            {
+              text: "Friday",
+              callback_data: "friday",
+            },
+            {
+              text: "Saturday",
+              callback_data: "saturday",
+            },
+          ],
+        ],
+      }
+    })
+  }
+
   if (string.includes('fun fact')) {
     try {
       const response = await axios.get(FACT_URL)
@@ -113,6 +138,13 @@ bot.on('text', async (ctx) => {
     }
   }
 })
+
+bot.on('callback_query', (callbackQuery) => {
+  console.log('callback query', callbackQuery)
+  const msg = callbackQuery.message;
+  bot.answerCallbackQuery(callbackQuery.id)
+      .then(() => bot.sendMessage(msg.chat.id, "You clicked!"));
+});
 
 const app = express();
 
