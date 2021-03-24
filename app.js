@@ -115,7 +115,7 @@ bot.on('text', async (ctx) => {
           console.log('data', response.data)
         }
       } catch(e) {
-        bot.sendMessage(chat_id, `shits broken: ${e}`)
+        bot.sendMessage(chat_id, `shits broken: ${e} ${stockURL}`)
         console.log(e)
       }
     }
