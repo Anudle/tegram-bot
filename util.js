@@ -7,8 +7,33 @@ const ucfirst = function (str) {
   return firstLetter.toUpperCase() + str.substr(1);
 }
 
+const findString = (string, target) => {
+  const stringArray = string.split('')
+  let indexOfTarget = stringArray.findIndex(el => el === target)
+  let lengthOfSymbol = stringArray.length - 1
+  return new Promise(function (resolve, reject) {
+    if (isNaN(stringArray[indexOfTarget + 1])) {
+      for (let i = indexOfTarget; i < stringArray.length; i++) {
+        if (stringArray[i] === ' ') {
+          lengthOfSymbol = i - indexOfTarget - 1
+          break
+        }
+      }
+      let symbol = stringArray.splice(indexOfTarget + 1, lengthOfSymbol).join('')
+      if (symbol) {
+        resolve(symbol)
+      } else {
+        reject('ERROR')
+      }
+    } else {
+      reject(null)
+    }
+  })
+}
+
 module.exports = {
   getRandomInt, 
-  ucfirst 
+  ucfirst,
+  findString
 }
  

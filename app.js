@@ -4,11 +4,13 @@ const axios = require("axios");
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
 const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
 const GIF_URL =  `https://g.tenor.com/v1/search?key=${process.env.GIF_KEY}&locale=en_US`
+const STOCK_URL = 'https://finnhub.io/api/v1/'
+const STOCK_TOKEN = process.env.STOCK_TOKEN
 const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
 const getGif = require('./api')
-const { getRandomInt, ucfirst } = require('./util')
+const { getRandomInt, ucfirst, findString } = require('./util')
 
 let bot;
  
@@ -97,6 +99,24 @@ bot.on('text', async (ctx) => {
       } catch(e){
         console.log(e)
         bot.sendMessage(chat_id, "Not today I'm broken")
+      }
+    }
+  }
+
+  if (string.includes('$')) {
+    let symbol = await findString(string, '$')
+    if (symbol) {
+      symbol = symbol.toUpperCase()
+      try {
+        const stockURL = `${STOCK_URL}quote?symbol=${symbol}&token=${process.env.STOCK_TOKEN}`
+        const response = await axios.get(stockURL)
+        if (response) {
+          bot.sendMessage(chat_id, `${symbol} last price was $${response.data.c}`)
+          console.log('data', response.data)
+        }
+      } catch(e) {
+        bot.sendMessage(chat_id, `shits broken: ${e}`)
+        console.log(e)
       }
     }
   }
