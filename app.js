@@ -3,9 +3,7 @@ require('dotenv').config();
 const axios = require("axios");
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
 const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
-const GIF_URL =  `https://g.tenor.com/v1/search?key=${process.env.GIF_KEY}&locale=en_US`
 const STOCK_URL = 'https://finnhub.io/api/v1/'
-const STOCK_TOKEN = process.env.STOCK_TOKEN
 const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -106,18 +104,21 @@ bot.on('text', async (ctx) => {
   if (string.includes('$')) {
     let symbol = await findString(string, '$')
     if (symbol) {
-      symbol = symbol.toUpperCase()
-      try {
-        const stockURL = `${STOCK_URL}quote?symbol=${symbol}&token=${process.env.STOCK_TOKEN}`
-        const response = await axios.get(stockURL)
-        if (response) {
-          bot.sendMessage(chat_id, `${symbol} last price was $${response.data.c}`)
-          console.log('data', response.data)
+      if (symbol.length > 6) {
+        bot.sendMessage(chat_id, `Don't abuse the bot ${ucfirst(name)}`)
+        return
+      } else {
+        symbol = symbol.toUpperCase()
+        try {
+          const stockURL = `${STOCK_URL}quote?symbol=${symbol}&token=${process.env.STOCK_TOKEN}`
+          const response = await axios.get(stockURL)
+          if (response) {
+            bot.sendMessage(chat_id, `${symbol} last price was $${response.data.c}`)
+          }
+        } catch(e) {
+          bot.sendMessage(chat_id, `shits broken: ${e} ${stockURL}`)
+          console.log(e)
         }
-        console.log('hey')
-      } catch(e) {
-        bot.sendMessage(chat_id, `shits broken: ${e} ${stockURL}`)
-        console.log(e)
       }
     }
   }

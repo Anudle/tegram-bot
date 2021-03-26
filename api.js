@@ -5,7 +5,6 @@ const axios = require("axios");
 const { getRandomInt } = require('./util')
 
 const getGif = async (searchTerm) => {
-  console.log(`url = ${GIF_URL}&q=${searchTerm}`)
   let gif
   try {
     const response = await axios.get(`${GIF_URL}&q=${searchTerm}`)
