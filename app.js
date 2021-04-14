@@ -29,7 +29,7 @@ bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
   const string = ctx.text.toLocaleLowerCase()
   const name = ctx.from.first_name.toLowerCase()
-
+  
   if (name  === 'brock') {
     if (brock_bets.some(word => string.includes(word))) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
@@ -63,6 +63,12 @@ bot.on('text', async (ctx) => {
       searchWord.unshift('colorado buffs')
     }
     let response = await getGif(searchWord[0])
+    if (response.includes('.gif')) {
+      bot.sendDocument(chat_id, response);
+    }
+  }
+  if (string.includes('evolve') || string.includes('evolution')) {
+    let response = await getGif('pokemon evolve')
     if (response.includes('.gif')) {
       bot.sendDocument(chat_id, response);
     }
