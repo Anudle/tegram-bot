@@ -26,21 +26,24 @@ const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already']
 
 bot.on('text', async (ctx) => {
-  // console.log(ctx)
   const chat_id = ctx.chat.id
   const string = ctx.text.toLowerCase()
   const name = ctx.from.first_name.toLowerCase()
   
   if (name === 'david') {
-    let randomNumber = Math.floor(Math.random() * 20)
+    const randomNumber = Math.floor(Math.random() * 20)
     if (randomNumber === 5) {
-      let index = Math.floor(Math.random() * 5)
+      const index = Math.floor(Math.random() * 5)
       bot.sendMessage(chat_id, david_compliments[index])
     }
   }
   if (name  === 'brock') {
     if (brock_bets.some(word => string.includes(word))) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
+    }
+    const randomNumber = Math.floor(Math.random() * 40)
+    if (randomNumber === 7) {
+      bot.sendMessage("is that your actual opinion or are you just making a bad faith argument because it’s 'provocative'?")
     }
   }
   if (insult_trigger.some(word => string.includes(word))) {
