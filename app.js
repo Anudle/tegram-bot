@@ -23,13 +23,22 @@ const brock_bets = [' bet ', 'betting']
 const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
 const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
+const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already']
 
 bot.on('text', async (ctx) => {
-  console.log(ctx)
+  // console.log(ctx)
   const chat_id = ctx.chat.id
-  const string = ctx.text.toLocaleLowerCase()
+  const string = ctx.text.toLowerCase()
   const name = ctx.from.first_name.toLowerCase()
   
+  if (name === 'david') {
+    let randomNumber = Math.floor(Math.random() * 3)
+    console.log('random', randomNumber)
+    if (randomNumber === 0) {
+      let index = Math.floor(Math.random() * 5)
+      bot.sendMessage(chat_id, david_compliments[index])
+    }
+  }
   if (name  === 'brock') {
     if (brock_bets.some(word => string.includes(word))) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
@@ -168,7 +177,7 @@ bot.on('text', async (ctx) => {
 })
 
 bot.on('callback_query', (callbackQuery) => {
-  console.log('callback query', callbackQuery)
+  // console.log('callback query', callbackQuery)
   const msg = callbackQuery.message;
   bot.answerCallbackQuery(callbackQuery.id)
       .then(() => bot.sendMessage(msg.chat.id, "You clicked!"));
