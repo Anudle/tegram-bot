@@ -23,7 +23,7 @@ const brock_bets = [' bet ', 'betting']
 const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
 const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
-const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already']
+const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already', 'How do you walk around with such a huge package David?']
 
 bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
@@ -33,7 +33,7 @@ bot.on('text', async (ctx) => {
   if (name === 'david') {
     const randomNumber = Math.floor(Math.random() * 20)
     if (randomNumber === 5) {
-      const index = Math.floor(Math.random() * 5)
+      const index = Math.floor(Math.random() * 6)
       bot.sendMessage(chat_id, david_compliments[index])
     }
   }
