@@ -32,9 +32,8 @@ bot.on('text', async (ctx) => {
   const name = ctx.from.first_name.toLowerCase()
   
   if (name === 'david') {
-    let randomNumber = Math.floor(Math.random() * 3)
-    console.log('random', randomNumber)
-    if (randomNumber === 0) {
+    let randomNumber = Math.floor(Math.random() * 20)
+    if (randomNumber === 5) {
       let index = Math.floor(Math.random() * 5)
       bot.sendMessage(chat_id, david_compliments[index])
     }
