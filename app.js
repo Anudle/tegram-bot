@@ -1,6 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 const axios = require("axios");
+const moment = require("moment-timezone")
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
 const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
 const STOCK_URL = 'https://finnhub.io/api/v1/'
@@ -8,7 +9,8 @@ const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
 const getGif = require('./api')
-const { getRandomInt, ucfirst, findString } = require('./util')
+const { getRandomInt, ucfirst, findString, today } = require('./util');
+
 
 let bot;
  
@@ -29,7 +31,22 @@ bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
   const string = ctx.text.toLowerCase()
   const name = ctx.from.first_name.toLowerCase()
-  
+  if (string.includes('mt')) {
+    const index = string.indexOf('mt')
+    let newString = string.slice(0, index)
+    let hour = newString.match(/\d+/g)[0]
+    if (hour) {
+      let time = `${today()} ${hour}PM`
+      const proposedTime = moment.tz(`${time}`, "YYYY-MM-DD HHa", "America/Denver");
+      const UTC = proposedTime.format()
+      const shanghai = moment.utc(`${UTC}`).tz('Asia/Shanghai').format("hh:mm a")
+      const chicago = moment.utc(`${UTC}`).tz('America/Chicago').format("hh:mm a")
+      const la = moment.utc(`${UTC}`).tz('America/Los_Angeles').format("hh:mm a")
+      const ny = moment.utc(`${UTC}`).tz('America/New_York').format("hh:mm a")
+      const denver = moment.utc(`${UTC}`).tz('America/Denver').format("hh:mm a")
+      bot.sendMessage(chat_id, ` Denver ${denver} \n Shanghai: ${shanghai} \n New York: ${ny}\n Chicago: ${chicago}\n Los Angles: ${la}`)
+    }
+  }
   if (name === 'david') {
     const randomNumber = Math.floor(Math.random() * 20)
     if (randomNumber === 5) {
