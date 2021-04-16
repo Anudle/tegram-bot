@@ -35,7 +35,7 @@ bot.on('text', async (ctx) => {
     const index = string.indexOf('mt')
     let newString = string.slice(0, index)
     let hour = newString.match(/\d+/g)[0]
-    if (hour) {
+    if (hour && hour < 13 && hour > 0) {
       let time = `${today()} ${hour}PM`
       const proposedTime = moment.tz(`${time}`, "YYYY-MM-DD HHa", "America/Denver");
       const UTC = proposedTime.format()
