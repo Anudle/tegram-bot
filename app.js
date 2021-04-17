@@ -44,7 +44,7 @@ bot.on('text', async (ctx) => {
       const la = moment.utc(`${UTC}`).tz('America/Los_Angeles').format("hh:mm a")
       const ny = moment.utc(`${UTC}`).tz('America/New_York').format("hh:mm a")
       const denver = moment.utc(`${UTC}`).tz('America/Denver').format("hh:mm a")
-      bot.sendMessage(chat_id, ` Denver ${denver} \n Shanghai: ${shanghai} \n New York: ${ny}\n Chicago: ${chicago}\n Los Angles: ${la}`)
+      bot.sendMessage(chat_id, ` Denver ${denver} \nShanghai: ${shanghai} \nNew York: ${ny}\nChicago: ${chicago}\nLos Angeles: ${la}`)
     }
   }
   if (name === 'david') {
