@@ -26,29 +26,40 @@ const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'ws
 const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already', 'How do you walk around with such a huge package David?']
+const timeZoneWatchers = ['mdt', 'edt', 'cdt', 'pdt', 'cst']
+const timeZoneMap = {
+  'mdt': 'America/Denver',
+  'cdt': 'America/Chicago',
+  'edt': 'America/New_York',
+  'pdt': 'America/Los_Angeles',
+  'cst': 'Asia/Shanghai'
+}
 
 bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
   const string = ctx.text.toLowerCase()
   const name = ctx.from.first_name.toLowerCase()
-  if (string.includes('mt')) {
-    const index = string.indexOf('mt')
+  if (timeZoneWatchers.some(value => string.includes(value))) {
+    const timeZone = timeZoneWatchers.filter(zone => string.includes(zone))
+    const index = string.indexOf(timeZone)
     let newString = string.slice(0, index)
     let hour = newString.match(/\d+/g)[0]
     if (hour && hour < 13 && hour > 0) {
-      let time = `${today()} ${hour}PM`
-      const proposedTime = moment.tz(`${time}`, "YYYY-MM-DD HHa", "America/Denver");
+      let pmOrAM = string.includes('am') && !string.includes('pm') ? 'AM' : 'PM'
+      let time = `${today()} ${hour}${pmOrAM}`
+      const proposedTime = moment.tz(`${time}`, "YYYY-MM-DD HHa", `${timeZoneMap[timeZone]}`);
+      
       const UTC = proposedTime.format()
       const shanghai = moment.utc(`${UTC}`).tz('Asia/Shanghai').format("hh:mm a")
       const chicago = moment.utc(`${UTC}`).tz('America/Chicago').format("hh:mm a")
       const la = moment.utc(`${UTC}`).tz('America/Los_Angeles').format("hh:mm a")
       const ny = moment.utc(`${UTC}`).tz('America/New_York').format("hh:mm a")
       const denver = moment.utc(`${UTC}`).tz('America/Denver').format("hh:mm a")
-      bot.sendMessage(chat_id, ` Denver ${denver} \nShanghai: ${shanghai} \nNew York: ${ny}\nChicago: ${chicago}\nLos Angeles: ${la}`)
+      bot.sendMessage(chat_id, `Shanghai: ${shanghai} \nNew York: ${ny}\nChicago: ${chicago}\nDenver ${denver}\nLos Angeles: ${la}`)
     }
   }
   if (name === 'david') {
-    const randomNumber = Math.floor(Math.random() * 20)
+    const randomNumber = getRandomInt(20)
     if (randomNumber === 5) {
       const index = Math.floor(Math.random() * 6)
       bot.sendMessage(chat_id, david_compliments[index])
@@ -58,7 +69,7 @@ bot.on('text', async (ctx) => {
     if (brock_bets.some(word => string.includes(word))) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
-    const randomNumber = Math.floor(Math.random() * 40)
+    const randomNumber = getRandomInt(40)
     if (randomNumber === 7) {
       bot.sendMessage("is that your actual opinion or are you just making a bad faith argument because it’s 'provocative'?")
     }
