@@ -5,6 +5,7 @@ const moment = require("moment-timezone")
 const FACT_URL = 'https://uselessfacts.jsph.pl/random.json?language=en'
 const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
 const STOCK_URL = 'https://finnhub.io/api/v1/'
+const CRYPTO_URL = `https://rest.coinapi.io`
 const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -13,12 +14,12 @@ const { getRandomInt, ucfirst, findString, today } = require('./util');
 
 
 let bot;
- 
+
 if (process.env.NODE_ENV === 'production') {
-   bot = new TelegramBot(token);
-   bot.setWebHook(process.env.HEROKU_URL + bot.token);
+  bot = new TelegramBot(token);
+  bot.setWebHook(process.env.HEROKU_URL + bot.token);
 } else {
-   bot = new TelegramBot(token, { polling: true });
+  bot = new TelegramBot(token, { polling: true });
 }
 
 const brock_bets = [' bet ', 'betting']
@@ -47,9 +48,7 @@ bot.on('text', async (ctx) => {
     if (hour && hour < 13 && hour > 0) {
       let pmOrAM = string.includes('am') && !string.includes('pm') ? 'AM' : 'PM'
       let time = `${today()} ${hour}${pmOrAM}`
-      const proposedTime = moment.tz(`${time}`, "YYYY-MM-DD HHa", `${timeZoneMap[timeZone]}`);
-      
-      const UTC = proposedTime.format()
+      const UTC = moment.tz(`${time}`, "YYYY-MM-DD HHa", `${timeZoneMap[timeZone]}`).format();
       const shanghai = moment.utc(`${UTC}`).tz('Asia/Shanghai').format("hh:mm a")
       const chicago = moment.utc(`${UTC}`).tz('America/Chicago').format("hh:mm a")
       const la = moment.utc(`${UTC}`).tz('America/Los_Angeles').format("hh:mm a")
@@ -61,7 +60,7 @@ bot.on('text', async (ctx) => {
   if (name === 'david') {
     const randomNumber = getRandomInt(20)
     if (randomNumber === 5) {
-      const index = Math.floor(Math.random() * 6)
+      const index = getRandomInt(6)
       bot.sendMessage(chat_id, david_compliments[index])
     }
   }
@@ -146,6 +145,39 @@ bot.on('text', async (ctx) => {
     }
   }
 
+  if (string.includes('!')){
+    let symbol = await findString(string, '!')
+    if (symbol) {
+      symbol = symbol.toUpperCase()
+      try{
+        axios.interceptors.request.use(function (config) {
+          config.headers['X-CoinAPI-Key'] = process.env.CRYPTO_TOKEN;
+          return config;
+        });
+        // const coinURL = `${CRYPTO_URL}/v1/quotes/${symbol}/latest`
+        //Exchange BINANCEFTS
+        // /v1/symbols/{exchange_id}
+        const exchangeURL = `${CRYPTO_URL}/v1/symbols/BINANCEFTS`
+        // console.log(exchangeURL)
+        const symbolsList = await axios.get(exchangeURL)
+        // const parsedSymbolsList = JSON.parse(symbolsList)
+  
+        if (symbolsList.data && symbolsList.data.length) {
+          let filtered = symbolsList.data.filter(obj => {
+            return obj.asset_id_base_exchange === symbol
+          })
+          if (filtered.length) {
+            let price = filtered[filtered.length - 1].price
+            bot.sendMessage(chat_id, `${symbol} last price was $${price}`)  
+          }
+          console.log('filtered', filtered)
+        }
+        } catch(e) {
+          console.log(e)
+        }
+    }
+  }
+  
   if (string.includes('$')) {
     let symbol = await findString(string, '$')
     if (symbol) {
@@ -157,7 +189,7 @@ bot.on('text', async (ctx) => {
         try {
           const stockURL = `${STOCK_URL}quote?symbol=${symbol}&token=${process.env.STOCK_TOKEN}`
           const response = await axios.get(stockURL)
-          if (response) {
+          if (response.data && response.data.c) {
             bot.sendMessage(chat_id, `${symbol} last price was $${response.data.c}`)
           }
         } catch(e) {
@@ -167,7 +199,7 @@ bot.on('text', async (ctx) => {
       }
     }
   }
-
+  
   if (string.includes('make zoom poll')){
     bot.sendMessage(chat_id, 'Beep Boop. Okay for what time?', { "reply_markup": {
         "inline_keyboard": [
