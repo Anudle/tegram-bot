@@ -186,7 +186,7 @@ bot.on('text', async (ctx) => {
             bot.sendMessage(chat_id, `${symbol} last price was $${response.data.c}`)
           }
         } catch(e) {
-          bot.sendMessage(chat_id, `shits broken: ${e} ${stockURL}`)
+          bot.sendMessage(chat_id, `shits broken: ${e}`)
           console.log(e)
         }
       }
