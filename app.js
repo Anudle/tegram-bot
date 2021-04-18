@@ -151,7 +151,7 @@ bot.on('text', async (ctx) => {
       symbol = symbol.toUpperCase()
       try{
         axios.interceptors.request.use(function (config) {
-          config.headers['X-CoinAPI-Key'] = process.env.CRYPTO_TOKEN;
+          config.headers['X-CoinAPI-Key'] = 'AA5DA641-E789-435E-8C32-CB033E2C6AF7'
           return config;
         });
         const exchangeURL = `${CRYPTO_URL}/v1/symbols/BINANCEFTS`
