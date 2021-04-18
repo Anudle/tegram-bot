@@ -154,14 +154,8 @@ bot.on('text', async (ctx) => {
           config.headers['X-CoinAPI-Key'] = process.env.CRYPTO_TOKEN;
           return config;
         });
-        // const coinURL = `${CRYPTO_URL}/v1/quotes/${symbol}/latest`
-        //Exchange BINANCEFTS
-        // /v1/symbols/{exchange_id}
         const exchangeURL = `${CRYPTO_URL}/v1/symbols/BINANCEFTS`
-        // console.log(exchangeURL)
         const symbolsList = await axios.get(exchangeURL)
-        // const parsedSymbolsList = JSON.parse(symbolsList)
-  
         if (symbolsList.data && symbolsList.data.length) {
           let filtered = symbolsList.data.filter(obj => {
             return obj.asset_id_base_exchange === symbol
@@ -170,7 +164,6 @@ bot.on('text', async (ctx) => {
             let price = filtered[filtered.length - 1].price
             bot.sendMessage(chat_id, `${symbol} last price was $${price}`)  
           }
-          console.log('filtered', filtered)
         }
         } catch(e) {
           console.log(e)
