@@ -69,9 +69,9 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
     }
     const randomNumber = getRandomInt(40)
-    if (randomNumber === 7) {
-      bot.sendMessage("is that your actual opinion or are you just making a bad faith argument because it’s 'provocative'?")
-    }
+    // if (randomNumber === 7) {
+    //   bot.sendMessage("is that your actual opinion or are you just making a bad faith argument because it’s 'provocative'?")
+    // }
   }
   if (insult_trigger.some(word => string.includes(word))) {
     let randomSearch = insult_search[getRandomInt(insult_search.length - 1)]
