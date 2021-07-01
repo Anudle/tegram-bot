@@ -11,7 +11,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const getGif = require('./api')
 const { getRandomInt, ucfirst, findString, today } = require('./util');
-
+// const schedule = require('node-schedule');
 
 let bot;
 
@@ -121,7 +121,7 @@ bot.on('text', async (ctx) => {
     bot.sendMessage(chat_id, 'Sko Buffs')
   }
   if (string.includes('csu')) {
-    bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!')
+    bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!!')
   }
   if (string.includes('insult')) {
     let stringArray = string.split(' ')
