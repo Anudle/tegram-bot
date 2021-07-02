@@ -9,7 +9,7 @@ const CRYPTO_URL = `https://rest.coinapi.io`
 const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
-const getGif = require('./api')
+const {getGif, getRandomPhoto, getTextOnPhoto} = require('./api')
 const { getRandomInt, ucfirst, findString, today } = require('./util');
 // const schedule = require('node-schedule');
 
@@ -169,6 +169,22 @@ bot.on('text', async (ctx) => {
           console.log(e)
         }
     }
+  }
+
+  let trigger = 'bot quote me'
+  if (string.includes(trigger)) {
+   let quote = string.slice(string.indexOf('bot quote me') + trigger.length).trim();
+   if (quote) {
+     quote = quote.trim()
+   }
+   console.log({quote})
+   try {
+     let photo = await getRandomPhoto()
+     const finalPhoto = await getTextOnPhoto(quote, photo)
+     bot.sendDocument(chat_id, finalPhoto)
+   }catch(e) {
+     console.error(e)
+   }
   }
   
   if (string.includes('$')) {
