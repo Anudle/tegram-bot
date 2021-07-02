@@ -180,7 +180,9 @@ bot.on('text', async (ctx) => {
    console.log({quote})
    try {
      let photo = await getRandomPhoto()
+     console.log({photo})
      const finalPhoto = await getTextOnPhoto(quote, photo)
+     console.log({finalPhoto})
      bot.sendDocument(chat_id, finalPhoto)
    }catch(e) {
      console.error(e)
