@@ -4,6 +4,25 @@ require('dotenv').config();
 const axios = require("axios");
 const { getRandomInt } = require('./util')
 
+const getRandomPhoto = async () => {
+  const UNSPLASH_URL = `https://api.unsplash.com/photos/random?client_id=${process.env.UNSPLASH_KEY}`
+  let photo
+  try {
+      const response = await axios.get(UNSPLASH_URL)
+      console.log(response.data)
+      photo = response.data && response.data.urls && response.data.urls.regular
+      console.log(photo)
+  } catch(e) {
+      console.error(e)
+  }
+  return photo 
+}
+
+const getTextOnPhoto = async (text, photo) => {
+  let textOverPictureURL = `https://textoverimage.moesif.com/image?image_url=${encodeURIComponent(photo)}&overlay_color=00000042&text=${encodeURIComponent(text)}&text_size=128&margin=50&y_align=middle&x_align=center`
+  return textOverPictureURL
+}
+
 const getGif = async (searchTerm) => {
   let gif
   try {
@@ -19,4 +38,8 @@ const getGif = async (searchTerm) => {
   return gif
 }
 
-module.exports = getGif
+module.exports = {
+  getRandomPhoto,
+  getGif,
+  getTextOnPhoto
+}
