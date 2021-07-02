@@ -171,7 +171,7 @@ bot.on('text', async (ctx) => {
     }
   }
 
-  let trigger = 'bot quote me'
+  let trigger = 'quote me'
   if (string.includes(trigger)) {
    let quote = string.slice(string.indexOf('bot quote me') + trigger.length).trim();
    if (quote) {
