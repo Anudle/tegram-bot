@@ -10,7 +10,7 @@ const getRandomPhoto = async () => {
   try {
       const response = await axios.get(UNSPLASH_URL)
       console.log(response.data)
-      photo = response.data && response.data.urls && response.data.urls.full
+      photo = response.data && response.data.urls && response.data.urls.regular
       console.log(photo)
   } catch(e) {
       console.error(e)
