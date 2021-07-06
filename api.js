@@ -18,6 +18,30 @@ const getRandomPhoto = async () => {
   return photo 
 }
 
+const kylesAPI = async (text, author) => {
+  let quotezURL
+  if (author) {
+    quotezURL = `http://dumb.kylebales.com/quotez?auth=NiVZfG1yvThe9nhR0YxurQ&quote=${encodeURIComponent(text)}&author=${author}`
+  } else {
+    quotezURL = `http://dumb.kylebales.com/quotez?auth=NiVZfG1yvThe9nhR0YxurQ&quote=${encodeURIComponent(text)}`
+  }
+  console.log({quotezURL})
+  let response
+  try {
+    response = await axios.get(quotezURL, {}, {
+      headers: {
+      'auth': process.env.KYLES_KEY
+      }
+    })
+  } catch (e) {
+    console.error(e)
+  }
+  console.log(response)
+  if (response.data && response.data.status === 'ok') {
+    return response.data.result
+  }
+}
+
 const getTextOnPhoto = async (text, photo) => {
   let textOverPictureURL = `https://textoverimage.moesif.com/image?image_url=${encodeURIComponent(photo)}&overlay_color=00000042&text=${encodeURIComponent(text)}&text_size=128&margin=50&y_align=middle&x_align=center`
   return textOverPictureURL
@@ -41,5 +65,7 @@ const getGif = async (searchTerm) => {
 module.exports = {
   getRandomPhoto,
   getGif,
-  getTextOnPhoto
+  getTextOnPhoto,
+  kylesAPI
 }
+

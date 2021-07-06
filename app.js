@@ -9,7 +9,7 @@ const CRYPTO_URL = `https://rest.coinapi.io`
 const token = process.env.TOKEN;
 const express = require('express')
 const bodyParser = require('body-parser');
-const {getGif, getRandomPhoto, getTextOnPhoto} = require('./api')
+const { kylesAPI, getGif, getRandomPhoto, getTextOnPhoto} = require('./api')
 const { getRandomInt, ucfirst, findString, today } = require('./util');
 // const schedule = require('node-schedule');
 
@@ -171,22 +171,27 @@ bot.on('text', async (ctx) => {
     }
   }
 
-  let trigger = 'bot quote me'
+  const trigger = 'bot quote'
   if (string.includes(trigger)) {
-   let quote = string.slice(string.indexOf(trigger) + trigger.length).trim();
-   if (quote) {
-     quote = quote.trim()
-   }
-   console.log({quote})
-   try {
-     let photo = await getRandomPhoto()
-     console.log({photo})
-     const finalPhoto = await getTextOnPhoto(quote, photo)
-     console.log({finalPhoto})
-     bot.sendDocument(chat_id, finalPhoto)
-   }catch(e) {
-     console.error(e)
-   }
+  let quote = string.slice(string.indexOf(trigger) + trigger.length).trim();
+  let arraySentence = quote.split(' ')
+  let author = arraySentence[0]
+  arraySentence.shift()
+  quote = arraySentence.join(' ')
+  if (author === 'this') {
+    author = null
+  } else if (author === 'me') {
+    author = name
+  }
+  console.log({quote})
+  console.log({author})
+  try {
+  const finalPhoto = await kylesAPI(quote, author)
+  console.log(finalPhoto)
+    bot.sendDocument(chat_id, finalPhoto)
+  }catch(e) {
+    console.error(e)
+  }
   }
   
   if (string.includes('$')) {
