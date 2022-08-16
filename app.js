@@ -57,13 +57,13 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, `Shanghai: ${shanghai} \nNew York: ${ny}\nChicago: ${chicago}\nDenver ${denver}\nLos Angeles: ${la}`)
     }
   }
-  if (name === 'david') {
-    const randomNumber = getRandomInt(20)
-    if (randomNumber === 5) {
-      const index = getRandomInt(6)
-      bot.sendMessage(chat_id, david_compliments[index])
-    }
-  }
+  // if (name === 'david') {
+  //   const randomNumber = getRandomInt(20)
+  //   if (randomNumber === 5) {
+  //     const index = getRandomInt(6)
+  //     bot.sendMessage(chat_id, david_compliments[index])
+  //   }
+  // }
   if (name  === 'brock') {
     if (brock_bets.some(word => string.includes(word))) {
       bot.sendMessage(chat_id, "'Nahhhhh' -Lucas Brandl")
