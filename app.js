@@ -17,7 +17,7 @@ let bot;
 
 if (process.env.NODE_ENV === 'production') {
   bot = new TelegramBot(token);
-  bot.setWebHook(process.env.HEROKU_URL + bot.token);
+  bot.setWebHook(process.env.HEROKU_URL + "/" + bot.token);
 } else {
   bot = new TelegramBot(token, { polling: true });
 }
@@ -188,7 +188,8 @@ bot.on('text', async (ctx) => {
   try {
   const finalPhoto = await kylesAPI(quote, author)
   console.log(finalPhoto)
-    bot.sendDocument(chat_id, finalPhoto)
+    bot.sendPhoto(chat_id, finalPhoto)
+	//bot.sendMessage(chat_id, `'${author}' says '${quote}'... the pic thing  is under construction. check back l8r`);
   }catch(e) {
     console.error(e)
   }
