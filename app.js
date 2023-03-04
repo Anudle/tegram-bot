@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const brock_bets = [' bet ', 'betting']
 const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
-const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
+const insult_trigger = ['ohio state', 'the sun', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already', 'How do you walk around with such a huge package David?']
 const timeZoneWatchers = ['mdt', 'edt', 'cdt', 'pdt', 'cst']
@@ -121,13 +121,13 @@ bot.on('text', async (ctx) => {
     bot.sendMessage(chat_id, 'Sko Buffs')
   }
   if (string.includes('csu')) {
-    bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!!')
+    bot.sendMessage(chat_id, 'whoever went to CSU around here is better than everyone else. thank you')
   }
   if (string.includes('insult')) {
     let stringArray = string.split(' ')
     let insult_name_index = stringArray.indexOf('insult') + 1
     let insult_name = stringArray[insult_name_index]
-    if (insult_name.toLowerCase() === 'anu') {
+    if (insult_name.toLowerCase() === 'asdfasdf') {
       bot.sendMessage(chat_id, "I'm sorry, I can't insult my bot father")
     } else {
       try {
