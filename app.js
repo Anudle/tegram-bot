@@ -7,11 +7,14 @@ const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
 const STOCK_URL = 'https://finnhub.io/api/v1/'
 const CRYPTO_URL = `https://rest.coinapi.io`
 const token = process.env.TOKEN;
+const revolution = process.env.OUR_CHAT_ID
 const express = require('express')
 const bodyParser = require('body-parser');
 const { kylesAPI, getGif, getRandomPhoto, getTextOnPhoto} = require('./api')
-const { getRandomInt, ucfirst, findString, today } = require('./util');
-// const schedule = require('node-schedule');
+const { getRandomInt, ucfirst, findString, today, isToday } = require('./util');
+const schedule = require('node-schedule');
+
+
 
 let bot;
 
@@ -36,6 +39,27 @@ const timeZoneMap = {
   'cst': 'Asia/Shanghai'
 }
 
+const dates =  [
+  { date: '2011-03-14T10:00:00Z', msg: 'Happy Pi Day!' },
+  { date: '2011-04-15T10:00:00Z', msg: 'Happy Birthday Anu!'},
+  { date: '2011-09-03T10:00:00Z', msg: 'Happy Birthday Lucas B!'},
+  { date: '2011-03-23T10:00:00Z', msg: 'Happy Birthday Brock!'},
+  { date: '2011-03-26T10:00:00Z', msg: 'Happy Birthday David!'},
+  { date: '2011-06-30T10:00:00Z', msg: 'Happy Birthday KB!'},
+  { date: '2011-07-05T10:00:00Z', msg: 'Happy Birthday Matt!'},
+  { date: '2011-12-15T10:00:00Z', msg: 'Happy Birthday Lucas C!'}
+]
+
+const job = schedule.scheduleJob('15 11 * * *', function(){
+  const today = new Date();
+  for(let i=0; i<dates.length; i++) {
+    let d = new Date(dates[i].date)
+    if (isToday(d))  {
+      bot.sendMessage(revolution, dates[i].msg)
+    }
+  }
+});
+
 bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
   const string = ctx.text.toLowerCase()
@@ -57,6 +81,7 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, `Shanghai: ${shanghai} \nNew York: ${ny}\nChicago: ${chicago}\nDenver ${denver}\nLos Angeles: ${la}`)
     }
   }
+
   // if (name === 'david') {
   //   const randomNumber = getRandomInt(20)
   //   if (randomNumber === 5) {

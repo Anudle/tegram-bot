@@ -39,10 +39,17 @@ const today = () => {
   return `${yyyy}-${mm}-${dd}`
 }
 
+const isToday = (someDate) => {
+  const today = new Date()
+  return someDate.getDate() == today.getDate() &&
+    someDate.getMonth() == today.getMonth()
+}
+
 module.exports = {
   getRandomInt, 
   ucfirst,
   findString,
-  today
+  today,
+  isToday
 }
  
