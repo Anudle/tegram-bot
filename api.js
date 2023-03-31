@@ -1,4 +1,4 @@
-const GIF_URL =  `https://g.tenor.com/v1/search?key=${process.env.GIF_KEY}`
+const GIF_URL =  `https://g.tenor.com/v2/search?key=${process.env.GIF_KEY}`
 
 require('dotenv').config();
 const axios = require("axios");
@@ -21,9 +21,9 @@ const getRandomPhoto = async () => {
 const kylesAPI = async (text, author) => {
   let quotezURL
   if (author) {
-    quotezURL = `http://dumb.kylebales.com/quotez?auth=NiVZfG1yvThe9nhR0YxurQ&quote=${encodeURIComponent(text)}&author=${author}`
+    quotezURL = `http://quote.heliumlink.io/quotez?auth=NiVZfG1yvThe9nhR0YxurQ&quote=${encodeURIComponent(text)}&author=${author}`
   } else {
-    quotezURL = `http://dumb.kylebales.com/quotez?auth=NiVZfG1yvThe9nhR0YxurQ&quote=${encodeURIComponent(text)}`
+    quotezURL = `http://quote.heliumlink.io/quotez?auth=NiVZfG1yvThe9nhR0YxurQ&quote=${encodeURIComponent(text)}`
   }
   console.log({quotezURL})
   let response

@@ -7,24 +7,27 @@ const INSULT_URL = 'https://insult.mattbas.org/api/insult.json'
 const STOCK_URL = 'https://finnhub.io/api/v1/'
 const CRYPTO_URL = `https://rest.coinapi.io`
 const token = process.env.TOKEN;
+const revolution = process.env.OUR_CHAT_ID
 const express = require('express')
 const bodyParser = require('body-parser');
 const { kylesAPI, getGif, getRandomPhoto, getTextOnPhoto} = require('./api')
-const { getRandomInt, ucfirst, findString, today } = require('./util');
-// const schedule = require('node-schedule');
+const { getRandomInt, ucfirst, findString, today, isToday } = require('./util');
+const schedule = require('node-schedule');
+
+
 
 let bot;
 
 if (process.env.NODE_ENV === 'production') {
   bot = new TelegramBot(token);
-  bot.setWebHook(process.env.HEROKU_URL + bot.token);
+  bot.setWebHook(process.env.HEROKU_URL + "/" + bot.token);
 } else {
   bot = new TelegramBot(token, { polling: true });
 }
 
 const brock_bets = [' bet ', 'betting']
 const gif_trigger = ['gme', 'amc', 'stonk', 'to the moon', 'wallstreetbets', 'wsb', 'yolo', 'diamond hand', 'autist', 'roll tide', 'rtr', 'go blue', 'sko buffs', 'denver lynx']
-const insult_trigger = ['ohio state', 'csu', 'auburn', 'lsu']
+const insult_trigger = ['ohio state', 'the sun', 'auburn', 'lsu']
 const insult_search = ['shit', 'sucks', 'chump', 'loser', 'stupid']
 const david_compliments = ['Roll tide my dude', 'you make a good point', "God you're so handsome David", 'Auburn is the worst', 'Can ABC just make you in charge of Disney already', 'How do you walk around with such a huge package David?']
 const timeZoneWatchers = ['mdt', 'edt', 'cdt', 'pdt', 'cst']
@@ -35,6 +38,27 @@ const timeZoneMap = {
   'pdt': 'America/Los_Angeles',
   'cst': 'Asia/Shanghai'
 }
+
+const dates =  [
+  { date: '2011-03-14T10:00:00Z', msg: 'Happy Pi Day!' },
+  { date: '2011-04-15T10:00:00Z', msg: 'Happy Birthday Anu!'},
+  { date: '2011-09-03T10:00:00Z', msg: 'Happy Birthday Lucas B!'},
+  { date: '2011-03-23T10:00:00Z', msg: 'Happy Birthday Brock!'},
+  { date: '2011-03-26T10:00:00Z', msg: 'Happy Birthday David!'},
+  { date: '2011-06-30T10:00:00Z', msg: 'Happy Birthday KB!'},
+  { date: '2011-07-05T10:00:00Z', msg: 'Happy Birthday Matt!'},
+  { date: '2011-12-15T10:00:00Z', msg: 'Happy Birthday Lucas C!'}
+]
+
+const job = schedule.scheduleJob('15 11 * * *', function(){
+  const today = new Date();
+  for(let i=0; i<dates.length; i++) {
+    let d = new Date(dates[i].date)
+    if (isToday(d))  {
+      bot.sendMessage(revolution, dates[i].msg)
+    }
+  }
+});
 
 bot.on('text', async (ctx) => {
   const chat_id = ctx.chat.id
@@ -57,6 +81,7 @@ bot.on('text', async (ctx) => {
       bot.sendMessage(chat_id, `Shanghai: ${shanghai} \nNew York: ${ny}\nChicago: ${chicago}\nDenver ${denver}\nLos Angeles: ${la}`)
     }
   }
+
   // if (name === 'david') {
   //   const randomNumber = getRandomInt(20)
   //   if (randomNumber === 5) {
@@ -121,13 +146,13 @@ bot.on('text', async (ctx) => {
     bot.sendMessage(chat_id, 'Sko Buffs')
   }
   if (string.includes('csu')) {
-    bot.sendMessage(chat_id, 'I said it sucks to be a CSU Ram!!')
+    bot.sendMessage(chat_id, 'whoever went to CSU around here is better than everyone else. thank you')
   }
   if (string.includes('insult')) {
     let stringArray = string.split(' ')
     let insult_name_index = stringArray.indexOf('insult') + 1
     let insult_name = stringArray[insult_name_index]
-    if (insult_name.toLowerCase() === 'anu') {
+    if (insult_name.toLowerCase() === 'asdfasdf') {
       bot.sendMessage(chat_id, "I'm sorry, I can't insult my bot father")
     } else {
       try {
@@ -188,7 +213,8 @@ bot.on('text', async (ctx) => {
   try {
   const finalPhoto = await kylesAPI(quote, author)
   console.log(finalPhoto)
-    bot.sendDocument(chat_id, finalPhoto)
+    bot.sendPhoto(chat_id, finalPhoto)
+	//bot.sendMessage(chat_id, `'${author}' says '${quote}'... the pic thing  is under construction. check back l8r`);
   }catch(e) {
     console.error(e)
   }
